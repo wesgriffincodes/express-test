@@ -38,4 +38,23 @@ describe('user routes', () => {
       });
   });
 
+  it('GET all users', async() => {
+    const users = await User.create([
+      { name: 'Billy' },
+      { name: 'Jimmy' },
+      { name: 'Dalton' }
+    ]);
+
+    return request(app)
+      .get('/api/v1/users')
+      .then(res => {
+        const usersJSON = JSON.parse(JSON.stringify(users));
+        usersJSON.forEach(user => {
+          expect(res.body).toContainEqual({ name: user.name, id: user._id });
+        });
+      });
+  });
+
+  
+
 });
